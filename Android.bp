@@ -240,14 +240,13 @@ cc_defaults {
 
 // adsprpcd
 cc_binary {
-    name: "adsprpcd_guestos",
+    name: "adsprpcd",
     defaults: ["fastrpc_daemon_defaults"],
     shared_libs: ["liblog", "libdl", "libadsprpc"],
     cflags: ["-DUSE_ADSP", "-DDEFAULT_DOMAIN_ID=0"],
     init_rc: [
         "src/vendor.qti.adsprpc-guestos-service.rc",
     ],
-    stem: "adsprpcd",
 }
 
 // cdsprpcd
