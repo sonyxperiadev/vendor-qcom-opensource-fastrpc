@@ -244,9 +244,6 @@ cc_binary {
     defaults: ["fastrpc_daemon_defaults"],
     shared_libs: ["liblog", "libdl", "libadsprpc"],
     cflags: ["-DUSE_ADSP", "-DDEFAULT_DOMAIN_ID=0"],
-    init_rc: [
-        "src/vendor.qti.adsprpc-guestos-service.rc",
-    ],
 }
 
 // cdsprpcd
@@ -255,14 +252,4 @@ cc_binary {
     defaults: ["fastrpc_daemon_defaults"],
     shared_libs: ["liblog", "libdl", "libcdsprpc"],
     cflags: ["-DUSE_CDSP", "-DDEFAULT_DOMAIN_ID=3"],
-    init_rc: [
-        "src/vendor.qti.cdsprpc-service.rc",
-    ],
-}
-
-sh_binary {
-    name: "init.cdsprpcd.softsku.sh",
-    src: "src/init.cdsprpcd.softsku.sh",
-    vendor: true,
-    filename: "init.cdsprpcd.softsku.sh",
 }
