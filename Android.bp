@@ -212,7 +212,7 @@ cc_library_shared {
 
 // sDSP default listener
 cc_library_shared {
-    name: "libssc_default_listener",
+    name: "libsdsp_default_listener",
     local_include_dirs: ["inc"],
     header_libs: ["adsprpc_inc_headers"],
     srcs: [":fastrpc_default_listener_sources"],
