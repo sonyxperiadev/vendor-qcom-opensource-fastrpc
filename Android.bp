@@ -246,6 +246,14 @@ cc_binary {
     cflags: ["-DUSE_ADSP", "-DDEFAULT_DOMAIN_ID=0"],
 }
 
+// sdsprpcd
+cc_binary {
+    name: "sdsprpcd",
+    defaults: ["fastrpc_daemon_defaults"],
+    shared_libs: ["liblog", "libdl", "libsdsprpc"],
+    cflags: ["-DUSE_SDSP", "-DDEFAULT_DOMAIN_ID=2"],
+}
+
 // cdsprpcd
 cc_binary {
     name: "cdsprpcd",
