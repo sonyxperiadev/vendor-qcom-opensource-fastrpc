@@ -24,6 +24,7 @@
 #define FASTRPC_IOCTL_INIT_CREATE_STATIC	_IOWR('R', 9, struct fastrpc_ioctl_init_create_static)
 #define FASTRPC_IOCTL_MEM_MAP			_IOWR('R', 10, struct fastrpc_ioctl_mem_map)
 #define FASTRPC_IOCTL_MEM_UNMAP			_IOWR('R', 11, struct fastrpc_ioctl_mem_unmap)
+#define FASTRPC_IOCTL_MULTIMODE_INVOKE		_IOWR('R', 12, struct fastrpc_ioctl_multimode_invoke)
 #define FASTRPC_IOCTL_GET_DSP_INFO		_IOWR('R', 13, struct fastrpc_ioctl_capability)
 
 #define ADSPRPC_DEVICE "/dev/fastrpc-adsp"
@@ -96,6 +97,10 @@
 
 #define FASTRPC_INVOKE2_STATUS_NOTIF		2	//TODO: Temporary change (Bharath to fix)
 #define FASTRPC_INVOKE2_KERNEL_OPTIMIZATIONS	1	//TODO: Temporary change (Bharath to fix)
+
+/* Request type for FASTRPC_IOCTL_MULTIMODE_INVOKE, must match the kernel driver */
+#define FASTRPC_INVOKE_SESSIONINFO		8
+
 #ifndef FASTRPC_MAX_DSP_ATTRIBUTES_FALLBACK
 #define FASTRPC_MAX_DSP_ATTRIBUTES_FALLBACK  1
 #endif
@@ -171,6 +176,24 @@ struct fastrpc_ioctl_capability {
 	__u32 attribute_id; /* attribute id*/
 	__u32 capability;   /* dsp capability */
 	__u32 reserved[4];
+};
+
+struct fastrpc_ioctl_multimode_invoke {
+	__u32 req;		/* request type, e.g. FASTRPC_INVOKE_SESSIONINFO */
+	__u64 invparam;		/* pointer to request specific parameters */
+	__u64 size;		/* size of request specific parameters */
+	__u32 reserved[8];
+};
+
+/*
+ * Payload for FASTRPC_INVOKE_SESSIONINFO request.
+ * Layout must match struct fastrpc_internal_sessinfo in the kernel driver.
+ */
+struct fastrpc_ioctl_sessinfo {
+	__u32 domain_id;	/* remote subsystem, not used by the driver */
+	__u32 session_id;	/* session id on remote subsystem */
+	__u32 pd;		/* process (PD) type on remote subsystem */
+	__u32 sharedcb;		/* not used by the driver */
 };
 
 /**

@@ -244,7 +244,31 @@ int ioctl_sharedbuf(int dev,
 }
 
 int ioctl_session_info(int dev, struct fastrpc_proc_sess_info *sess_info) {
-  return AEE_EUNSUPPORTED;
+  int ioErr = AEE_SUCCESS;
+  struct fastrpc_ioctl_sessinfo info = {0};
+  struct fastrpc_ioctl_multimode_invoke invoke = {0};
+
+  info.domain_id = sess_info->domain_id;
+  info.session_id = sess_info->session_id;
+  info.pd = sess_info->pd_type;
+
+  invoke.req = FASTRPC_INVOKE_SESSIONINFO;
+  invoke.invparam = (uint64_t)(uintptr_t)&info;
+  invoke.size = sizeof(info);
+
+  ioErr = ioctl(dev, FASTRPC_IOCTL_MULTIMODE_INVOKE, (unsigned long)&invoke);
+  if (ioErr) {
+    FARF(ERROR, "%s: session info ioctl failed, errno %d (%s)", __func__, errno,
+         strerror(errno));
+    return ioErr;
+  }
+  /*
+   * The driver does not write anything back. remote_init() stores
+   * sess_info->domain_id as the domain info after a successful call, which
+   * is what ioctl_getinfo() returns in this file, so report the same value.
+   */
+  sess_info->domain_id = 1;
+  return AEE_SUCCESS;
 }
 
 int ioctl_optimization(int dev, uint32_t max_concurrency) {
